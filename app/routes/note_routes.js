@@ -1,36 +1,59 @@
-module.exports = function(app, db) {
-    app.post('/notes', (req, res) => {
-        console.log(req.body)
-    res.send('Hello')
-});
 
-//     app.post('/login', (req, res) => {
-//         console.log(req.body)
-//     res.send('Hello')
-// });
-//     app.post('/registration', (req, res) => {
-//         console.log(req.body)
-//     res.send('Hello')
-// });
+module.exports = function (app, db) {
+
+    var User = require('../models/user.model');
+    var Note = require('../models/note.model');
+
+    app.post('/registration', (req, res) => {
+        var user = new User({
+            email: req.body.email,
+            login: req.body.login,
+            password: req.body.password,
+            username: req.body.username
+        });
+        var note = new Note({
+            username: req.body.username
+        });
+
+        user.save(function (err) {
+            if (err) return console.log(err);
+            console.log("Сохранен объект", user);
+        });
+        note.save(function (err) {
+            if (err) return console.log(err);
+            console.log("Сохранён объект", note);
+
+        });
+
+        res.send('Registration complited');
+    })
 
 
-    app.get('/todo', (req, res) => {
-        console.log(req.body)
-//     user.find({}, (err, items) => {
-//         if (err) {
-//             res.send({'error':'An error has occurred'});
-//         } else {
-//             res.send(item);
-// }
-// });
-    res.send('Hello')
-});
+    app.post('/login', (req, res) => {
+        console.log(req.body);
 
-//     app.get('/todo/:id', (req, res) => {
-//         console.log('sdfsfsdfsdfsdfsff')
-//     res.send('Hello')
-// });
-//
+        User.findOne({username: req.body.username}, function (err, obj) {
+            //console.log(obj);
+            if (obj=== null && req.body.password === obj.password) {
+                res.send('pass corrected');
+
+            } else {
+                res.send('pass incorrected');
+            }
+        })
+        res.send('boroda');
+    })
+
+
     app.post('/todo', (req, res) => {
-        console.log('sdfsfsdfsdfsdfsff')
+        console.log(req.body);
+
+        Note.findOne({username: req.body.username}, function (err, obj) {
+            console.log(obj.note);
+        });
+        res.send('arrayOfNotes');
+    })
+
 };
+
+
