@@ -48,25 +48,23 @@ const app            = express();
 const mongoose       = require('mongoose');
 const passport       = require('passport');
 var cors             = require('cors')
-
+const mongoDB = 'mongodb://localhost/todo';
 const port = 8000;
+
 app.use(bodyParser());
 app.use(cors());
 require('./app/routes')(app, {});
 
-const mongoDB = 'mongodb://localhost/todo';
+
 mongoose.Promise = global.Promise;
 mongoose.connect(mongoDB, function (err) {
     if (err) throw err;
     console.log('Successfully connected');
 });
 
-app.use(require('express-session')({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true }
-}));
+
+
+
 
 
 
